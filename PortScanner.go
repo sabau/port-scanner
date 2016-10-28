@@ -169,6 +169,13 @@ var KNOWN_PORTS = map[int]string{
 	631:   "cups",
 	5800:  "VNC remote desktop",
 	194:   "IRC",
+	1720:  "h323 Signaling",
+	//Vidyo Ports
+	80:    "Web",
+	443:   "SSL Web",
+	17990: "Vidyo License",
+	17992: "Vidyo Presence",
+
 	118:   "SQL service?",
 	150:   "SQL-net?",
 	1433:  "Microsoft SQL server",
@@ -178,6 +185,11 @@ var KNOWN_PORTS = map[int]string{
 	3535:  "SMTP (alternate)",
 	554:   "RTSP",
 	9160:  "Cassandra [ http://cassandra.apache.org/ ]",
+}
+
+var KNOWN_UDP_PORTS = map[int]string{
+	50000: "Start Vidyo UDP media range",
+	65535: "End Vidyo UDP media range",
 }
 
 func (h PortScanner) predictPort(port int) string {
