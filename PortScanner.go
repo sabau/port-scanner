@@ -25,10 +25,13 @@ type PortScanner struct {
 }
 
 func NewPortScanner(host string, timeout time.Duration) *PortScanner {
-	return &PortScanner{host, []predictors.Predictor{
-		&webserver.ApachePredictor{},
-		&webserver.NginxPredictor{},
-	}, timeout,
+	return &PortScanner{
+		host: host,
+		predictors: []predictors.Predictor{
+			&webserver.ApachePredictor{},
+			&webserver.NginxPredictor{},
+		},
+		timeout: timeout,
 	}
 }
 func (h PortScanner) SetTimeout(timeout time.Duration) {
@@ -58,10 +61,35 @@ func (h PortScanner) IsOpen(port int) bool {
 	return true
 }
 
+func (h PortScanner) IsOpenUDP(port int) bool {
+	udpAddr, err := net.ResolveUDPAddr("udp4", h.hostPort(port))
+	if err != nil {
+		return false
+	}
+	conn, err := net.DialTimeout("udp", udpAddr.String(), h.timeout)
+	if err != nil {
+		return false
+	}
+
+	defer conn.Close()
+
+	return true
+}
+
 func (h PortScanner) GetOpenedPort(portStart int, portEnds int) []int {
 	rv := []int{}
 	for port := portStart; port <= portEnds; port++ {
 		if h.IsOpen(port) {
+			rv = append(rv, port)
+		}
+	}
+	return rv
+}
+
+func (h PortScanner) GetOpenedUDPPort(portStart int, portEnds int) []int {
+	rv := []int{}
+	for port := portStart; port <= portEnds; port++ {
+		if h.IsOpenUDP(port) {
 			rv = append(rv, port)
 		}
 	}
