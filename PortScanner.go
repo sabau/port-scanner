@@ -197,10 +197,11 @@ var KNOWN_PORTS = map[int]string{
 	631:   "cups",
 	5800:  "VNC remote desktop",
 	194:   "IRC",
-	1720:  "h323 Signaling",
 	//Vidyo Ports
 	80:    "Web",
 	443:   "SSL Web",
+	5060:  "SIP Protocol",
+	1720:  "h323 Signaling",
 	17990: "Vidyo License",
 	17992: "Vidyo Presence",
 
